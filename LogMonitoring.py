@@ -1,3 +1,4 @@
+from datetime import datetime
 
 # parse the current log line to obtain the necessary info
 def parse_info(line):
@@ -30,6 +31,22 @@ def identify_process(process):
         process_type = "task"
     return process_type
 
+# calculate the duration between start and end timestamps
+def calculate_duration(start_time, end_time):
+    # print(type(start_time))
+    # convert start and time into datetime objects
+    start = datetime.strptime(start_time, "%H:%M:%S")
+    end = datetime.strptime(end_time, "%H:%M:%S")
+
+    # print(end, start)
+    # print(type(start))
+    # print(type(end))
+
+    # calculate the duration in second and convert it to minutes
+    duration = (end-start).total_seconds() / 60  
+
+    return duration
+
 def main():
     # intialize a dictionary to store every job/task with the two allocated times: start and end ('job_pid':['start_time', 'end_time'])
     jobs = dict()
@@ -41,15 +58,18 @@ def main():
             # print(timestamp, process, status, pid)
             
             process_type = identify_process(process)
-            print(process_type)
+            # print(process_type)
 
             # if status is "START" then store the start time for the job
             if status == "START":
-                jobs[pid] == [timestamp]
+                jobs[pid] = [timestamp]
             elif pid in jobs.keys() and status == "END": #if status is "END" then store the end time for the job
                 jobs[pid].append(timestamp)
 
-            print(jobs[pid])
+                duration = calculate_duration(jobs[pid][0], jobs[pid][1])
+                # print(duration, pid)
+            # print(jobs[pid])
 
+                
 if __name__ == '__main__':
     main()
