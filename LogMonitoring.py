@@ -21,6 +21,15 @@ def parse_info(line):
 
     return timestamp, process, status, pid
 
+# identify if the process is a job or task
+def identify_process(process):
+    # if the keyword "job" is in the process description then it's a job
+    if "job" in process:
+        process_type = "job"
+    elif "task" in process: #if the keyword "task" is in the process description then it's a task
+        process_type = "task"
+    return process_type
+
 def main():
 
     # open the file for reading
@@ -29,6 +38,9 @@ def main():
             # print(line)
             timestamp, process, status, pid = parse_info(line)
             # print(timestamp, process, status, pid)
+            
+            process_type = identify_process(process)
+            print(process_type)
 
 if __name__ == '__main__':
     main()
