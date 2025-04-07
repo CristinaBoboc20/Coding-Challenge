@@ -31,7 +31,8 @@ def identify_process(process):
     return process_type
 
 def main():
-
+    # intialize a dictionary to store every job/task with the two allocated times: start and end ('job_pid':['start_time', 'end_time'])
+    jobs = dict()
     # open the file for reading
     with open("logs.log", "r") as log_file:
         for line in log_file:
@@ -41,6 +42,14 @@ def main():
             
             process_type = identify_process(process)
             print(process_type)
+
+            # if status is "START" then store the start time for the job
+            if status == "START":
+                jobs[pid] == [timestamp]
+            elif pid in jobs.keys() and status == "END": #if status is "END" then store the end time for the job
+                jobs[pid].append(timestamp)
+
+            print(jobs[pid])
 
 if __name__ == '__main__':
     main()
