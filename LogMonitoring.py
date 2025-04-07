@@ -47,6 +47,20 @@ def calculate_duration(start_time, end_time):
 
     return duration
 
+# log message if the processing time exceeds certain thresholds
+def log_messages(process_type, pid, duration):
+    message = ""
+    # if the duration is greater then 10 minutes => log an error message
+    if duration > 10:
+        message = f'Error: {process_type} with id: {pid} and duration: {duration:.2f} minutes has exceeded the time limit of 10 minutes\n'
+    elif duration > 5: # if the duration is greater then 5 minuts -> log a warning message
+        message = f'Warning: {process_type} with id: {pid} and duration: {duration:2f} minutes has exceeded the time limit of 5 minutes\n'
+
+    # write to file if it's an error or a warning messsage
+    if message !="":
+        with open("output.txt", "a") as g:
+            g.write(message)
+
 def main():
     # intialize a dictionary to store every job/task with the two allocated times: start and end ('job_pid':['start_time', 'end_time'])
     jobs = dict()
@@ -68,6 +82,9 @@ def main():
 
                 duration = calculate_duration(jobs[pid][0], jobs[pid][1])
                 # print(duration, pid)
+                
+                # log the appropiate message when duration exceeds 5 or 10 minutes
+                log_messages(process_type, pid, duration)
             # print(jobs[pid])
 
                 
